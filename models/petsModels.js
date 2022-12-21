@@ -32,4 +32,17 @@ function getPetsModel(querys) {
   } catch (error) {}
 }
 
-module.exports = { addPetToDbModel, getPetsModel };
+function getPetById(id) {
+  try {
+    const file = fs.readFileSync(path.resolve(__dirname, "../db.json"));
+    const parsed = JSON.parse(file);
+
+    const pet = parsed.find((pet) => pet.id === id);
+    if (!pet) throw new Error("Cannot find pet");
+    return pet;
+  } catch (error) {
+    return error;
+  }
+}
+
+module.exports = { addPetToDbModel, getPetsModel, getPetById };

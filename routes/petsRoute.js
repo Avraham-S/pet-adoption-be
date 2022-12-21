@@ -3,7 +3,11 @@ const express = require("express");
 const router = express.Router();
 const cors = require("cors");
 
-const { addPetToDbModel, getPetsModel } = require("../models/petsModels");
+const {
+  addPetToDbModel,
+  getPetsModel,
+  getPetById,
+} = require("../models/petsModels");
 const { validateBody, validateQuery } = require("../middleware/petsMiddleware");
 const { petsSchema, querySchema } = require("../middleware/schemas/petsSchema");
 router.use(express.json());
@@ -33,6 +37,14 @@ router.get("/", validateQuery(querySchema), (req, res) => {
   }
 });
 
-router.get("/:id", (req, res) => {});
+router.get("/:id", (req, res) => {
+  try {
+    const { id } = req.params;
+    const pet = getPetById(id);
+    res.send(pet);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
 
 module.exports = router;
