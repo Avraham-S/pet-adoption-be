@@ -9,7 +9,7 @@ const {
   getPetById,
 } = require("../models/petsModels");
 const { validateBody, validateQuery } = require("../middleware/petsMiddleware");
-const { petsSchema, querySchema } = require("../middleware/schemas/petsSchema");
+const { petsSchema, querySchema } = require("../schemas/petsSchema");
 router.use(express.json());
 router.use(cors());
 
