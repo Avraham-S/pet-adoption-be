@@ -1,15 +1,11 @@
 const fs = require("fs");
 const path = require("path");
+const dbConnection = require("../knex/knex");
 
-function addPetToDbModel(newPet) {
+async function addPetToDbModel(newPet) {
   try {
-    const db = fs.readFileSync(path.resolve(__dirname, "../db.json"));
-    const parsed = JSON.parse(db);
-    parsed.push(newPet);
-    fs.writeFileSync(
-      path.resolve(__dirname, "../db.json"),
-      JSON.stringify(parsed)
-    );
+    const response = await dbConnection.insert(newPet);
+
     return true;
   } catch (error) {
     return false;

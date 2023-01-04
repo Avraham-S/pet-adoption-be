@@ -16,7 +16,7 @@ module.exports = {
     max: 7,
   },
   migrations: {
-    tableNanme: "migrations",
+    tableName: "migrations",
     directory: pathToMigrations,
   },
 };

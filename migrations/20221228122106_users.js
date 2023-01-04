@@ -1,13 +1,16 @@
-exports.up = function (knex) {
-  return knex.schema.createTable("users", (table) => {
-    table.string("id").primary();
-    table.string("firstName").notNullable();
-    table.string("lastName").notNullable();
-    table.string("email").notNullable();
-    table.string("password").notNullable();
-    table.string("phone");
-    table.timestamp("createdAt").defaultTo(knex.fn.now());
-  });
+exports.up = async function (knex) {
+  const exists = await knex.schema.hasTable("users");
+  if (!exists) {
+    return await knex.schema.createTable("users", (table) => {
+      table.string("id").primary();
+      table.string("firstName").notNullable();
+      table.string("lastName").notNullable();
+      table.string("email").notNullable();
+      table.string("password").notNullable();
+      table.string("phone");
+      table.timestamp("createdAt").defaultTo(knex.fn.now());
+    });
+  }
 };
 
 exports.down = function (knex) {
