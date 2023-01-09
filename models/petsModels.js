@@ -1,44 +1,64 @@
 const fs = require("fs");
+const { type } = require("os");
 const path = require("path");
 const dbConnection = require("../knex/knex");
 
 async function addPetToDbModel(newPet) {
   try {
-    const response = await dbConnection.insert(newPet);
+    console.log("db");
+    console.log(newPet);
 
-    return true;
+    const response = await dbConnection.from("pets").insert(newPet);
+    console.log(response);
+    console.log("res");
+
+    return response;
   } catch (error) {
+    console.error(error);
     return false;
   }
 }
 // { name, height, weight, type, status }
-function getPetsModel(querys) {
+async function getPetsModel(querys) {
   try {
-    const file = fs.readFileSync(path.resolve(__dirname, "../db.json"));
-    const parsed = JSON.parse(file);
-    let filtered = [...parsed];
-
-    Object.keys(querys).forEach(
-      (query) =>
-        (filtered = filtered.filter((pet) => {
-          return String(pet[query]) === String(querys[query]);
-        }))
-    );
+    const filtered = await dbConnection.from("pets");
     return filtered;
   } catch (error) {}
 }
 
-function getPetById(id) {
+async function getPetById(id) {
   try {
-    const file = fs.readFileSync(path.resolve(__dirname, "../db.json"));
-    const parsed = JSON.parse(file);
+    const pet = await dbConnection.from("pets").where({ petId: id });
+    console.log(pet);
 
-    const pet = parsed.find((pet) => pet.id === id);
-    if (!pet) throw new Error("Cannot find pet");
     return pet;
   } catch (error) {
     return error;
   }
 }
 
-module.exports = { addPetToDbModel, getPetsModel, getPetById };
+async function updatePetStatus(petId, ownerId, type) {
+  try {
+    let updateTo;
+    switch (type) {
+      case "adopt":
+        updateTo = "adopted";
+        break;
+      case "foster":
+        updateTo = "fostered";
+        break;
+      case "return":
+        updateTo = "available";
+    }
+
+    const pet = await dbConnection
+      .from("pets")
+      .where({ petId })
+      .update({ ownerId, adoptionStatus: updateTo });
+    return pet;
+  } catch (error) {
+    return error;
+  }
+}
+
+module.exports = { addPetToDbModel, getPetsModel, getPetById, updatePetStatus };

@@ -5,16 +5,16 @@ exports.up = async function (knex) {
       table.increments("petId").primary();
       table.string("type").notNull();
       table.string("name").notNull();
-      table.string("adoptionStatus").notNull();
-      table.string("picture").notNull();
+      table.string("adoptionStatus").notNull().defaultTo("available");
+      table.string("picture");
       table.string("breed");
-      table.float("height");
-      table.float("weight");
+      table.integer("height");
+      table.integer("weight");
       table.string("color");
       table.text("bio");
       table.boolean("hypoallergenic");
+      table.string("ownerId");
       table.string("dietary");
-      table.integer("ownerId");
       table.timestamp("created_at").defaultTo(knex.fn.now());
     });
   }

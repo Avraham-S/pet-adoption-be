@@ -10,8 +10,8 @@ const petsSchema = {
     color: { type: "string" },
     bio: { type: "string" },
     hypoallergenic: { type: "boolean" },
-    dietaryRestrictions: { type: "array" },
-    Breed: { type: "string" },
+    dietary: { type: "string" },
+    breed: { type: "string" },
   },
   additionalProperties: false,
 };
