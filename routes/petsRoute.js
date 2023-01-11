@@ -9,12 +9,16 @@ const {
   getPetById,
   updatePetStatus,
 } = require("../models/petsModels");
-const { validateBody, validateQuery } = require("../middleware/petsMiddleware");
+const {
+  validateBody,
+  validateQuery,
+  verifyToken,
+} = require("../middleware/petsMiddleware");
 const { petsSchema, querySchema } = require("../schemas/petsSchema");
 router.use(express.json());
 router.use(cors());
 
-router.post("/", validateBody(petsSchema), (req, res) => {
+router.post("/", validateBody(petsSchema), verifyToken, (req, res) => {
   try {
     const added = addPetToDbModel(req.body);
 
@@ -24,17 +28,16 @@ router.post("/", validateBody(petsSchema), (req, res) => {
   }
 });
 
-router.post("/adopt", async (req, res) => {
+router.post("/adopt", verifyToken, async (req, res) => {
   try {
     const { petId, ownerId, type } = req.body;
     const pet = await updatePetStatus(petId, ownerId, type);
-    console.log(pet);
-
-    res.send(type);
+    res.send(pet);
   } catch (error) {
     res.status(500).send(error);
   }
 });
+
 // ?status&type&height&weight&name
 router.get("/", validateQuery(querySchema), async (req, res) => {
   try {

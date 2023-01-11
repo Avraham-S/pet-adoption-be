@@ -4,7 +4,7 @@ const petsSchema = {
     type: { type: "string" },
     name: { type: "string" },
     adoptionStatus: { type: "string" },
-    picture: { type: "string" },
+    picture: { type: "file" },
     height: { type: "number" },
     weight: { type: "number" },
     color: { type: "string" },
@@ -24,6 +24,7 @@ const querySchema = {
     status: { type: "string" },
     height: { type: "string" },
     weight: { type: "string" },
+    ownerId: { type: "string" },
   },
   additionalProperties: false,
 };

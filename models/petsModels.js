@@ -19,9 +19,11 @@ async function addPetToDbModel(newPet) {
   }
 }
 // { name, height, weight, type, status }
-async function getPetsModel(querys) {
+async function getPetsModel(
+  querys // object
+) {
   try {
-    const filtered = await dbConnection.from("pets");
+    const filtered = await dbConnection.from("pets").where(querys);
     return filtered;
   } catch (error) {}
 }
@@ -51,10 +53,15 @@ async function updatePetStatus(petId, ownerId, type) {
         updateTo = "available";
     }
 
-    const pet = await dbConnection
+    await dbConnection
       .from("pets")
       .where({ petId })
-      .update({ ownerId, adoptionStatus: updateTo });
+      .update({
+        ownerId: type !== "return" ? ownerId : null,
+        adoptionStatus: updateTo,
+      });
+
+    const pet = await dbConnection.from("pets").where({ petId });
     return pet;
   } catch (error) {
     return error;
