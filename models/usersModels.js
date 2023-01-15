@@ -24,14 +24,53 @@ const addUserToDbModel = async (data) => {
 async function getUserByEmailModel(email) {
   try {
     const user = await dbConnection.from("users").where({ email: email });
-    console.log("user:", user);
+    // console.log("user:", user);
     return user;
   } catch (error) {
     console.error(error);
   }
 }
 
-module.exports = { addUserToDbModel, getUserByEmailModel };
+async function getAllUsersModel() {
+  try {
+    const users = await dbConnection.from("users");
+    return users;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function changeAdminStatusModel(id) {
+  try {
+    const [user] = await dbConnection.from("users").where({ id });
+    console.log(user);
+
+    await dbConnection
+      .from("users")
+      .where({ id })
+      .update({ isAdmin: user.isAdmin ? 0 : 1 });
+    return await dbConnection.from("users").where({ id });
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function getUserById(id) {
+  try {
+    const [user] = await dbConnection.from("users").where({ id });
+    return user;
+  } catch (error) {
+    return error;
+  }
+}
+
+module.exports = {
+  addUserToDbModel,
+  getUserByEmailModel,
+  getAllUsersModel,
+  changeAdminStatusModel,
+  getUserById,
+};
 
 /*
 repassword:"schochet0205",

@@ -9,6 +9,7 @@ exports.up = async function (knex) {
       table.string("password").notNullable();
       table.string("phone");
       table.timestamp("createdAt").defaultTo(knex.fn.now());
+      table.boolean("isAdmin").defaultTo(false).notNullable();
     });
   }
 };

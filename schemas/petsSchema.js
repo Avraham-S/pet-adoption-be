@@ -4,7 +4,7 @@ const petsSchema = {
     type: { type: "string" },
     name: { type: "string" },
     adoptionStatus: { type: "string" },
-    picture: { type: "file" },
+    picture: { type: "string" },
     height: { type: "number" },
     weight: { type: "number" },
     color: { type: "string" },

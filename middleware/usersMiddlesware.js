@@ -6,7 +6,7 @@ require("dotenv").config();
 async function isNewUser(req, res, next) {
   try {
     const user = await getUserByEmailModel(req.body.email);
-    console.log(user);
+    // console.log(user);
 
     if (user.length) {
       res.status(400).send("User already exists");
@@ -45,9 +45,11 @@ async function verifyPassword(req, res, next) {
         return;
       }
       if (result) {
-        const token = jwt.sign({ id: user.id }, process.env.JWT_KEY, {
-          expiresIn: "2hrs",
-        });
+        const token = jwt.sign(
+          { id: user.id, isAdmin: !!user.isAdmin },
+          process.env.JWT_KEY,
+          { expiresIn: "2hrs" }
+        );
         req.body.token = token;
         next();
       } else {

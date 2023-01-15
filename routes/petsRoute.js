@@ -8,6 +8,7 @@ const {
   getPetsModel,
   getPetById,
   updatePetStatus,
+  getPetsByOwnerId,
 } = require("../models/petsModels");
 const {
   validateBody,
@@ -15,12 +16,13 @@ const {
   verifyToken,
 } = require("../middleware/petsMiddleware");
 const { petsSchema, querySchema } = require("../schemas/petsSchema");
+
 router.use(express.json());
 router.use(cors());
 
-router.post("/", validateBody(petsSchema), verifyToken, (req, res) => {
+router.post("/", validateBody(petsSchema), verifyToken, async (req, res) => {
   try {
-    const added = addPetToDbModel(req.body);
+    const added = await addPetToDbModel(req.body);
 
     res.send(added);
   } catch (error) {
@@ -57,6 +59,16 @@ router.get("/:id", async (req, res) => {
     res.send(pet);
   } catch (error) {
     res.status(500).send(error.message);
+  }
+});
+
+router.get("/user/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const pets = await getPetsByOwnerId(id);
+    res.send(pets);
+  } catch (error) {
+    res.status(500).send(error);
   }
 });
 

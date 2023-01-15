@@ -31,7 +31,7 @@ async function getPetsModel(
 async function getPetById(id) {
   try {
     const pet = await dbConnection.from("pets").where({ petId: id });
-    console.log(pet);
+    // console.log(pet);
 
     return pet;
   } catch (error) {
@@ -68,4 +68,19 @@ async function updatePetStatus(petId, ownerId, type) {
   }
 }
 
-module.exports = { addPetToDbModel, getPetsModel, getPetById, updatePetStatus };
+async function getPetsByOwnerId(id) {
+  try {
+    const pets = await dbConnection.from("pets").where({ ownerId: id });
+    return pets;
+  } catch (error) {
+    return error;
+  }
+}
+
+module.exports = {
+  addPetToDbModel,
+  getPetsModel,
+  getPetById,
+  updatePetStatus,
+  getPetsByOwnerId,
+};

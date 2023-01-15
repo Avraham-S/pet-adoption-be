@@ -30,7 +30,7 @@ const verifyToken = (req, res, next) => {
 
   const token = req.headers.authorization.split(" ")[1].replaceAll('"', "");
 
-  console.log(token);
+  // console.log(token);
 
   jwt.verify(token, process.env.JWT_KEY, (err, decoded) => {
     if (err) {
@@ -41,6 +41,8 @@ const verifyToken = (req, res, next) => {
     }
     if (decoded) {
       // req.body.userId = decoded.id;
+      // console.log(decoded);
+
       next();
     }
   });
