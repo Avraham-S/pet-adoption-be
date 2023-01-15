@@ -3,17 +3,21 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-async function isNewUser(req, res, next) {
+async function isNewEmail(req, res, next) {
   try {
+    console.log("3");
     const user = await getUserByEmailModel(req.body.email);
     // console.log(user);
+    // console.log(req.params.id);
 
-    if (user.length) {
-      res.status(400).send("User already exists");
+    if (user.length && user.id !== req.params.id) {
+      res.status(400).send("Email already in use");
       return;
     }
+    console.log("4");
     next();
   } catch (err) {
+    console.log(err);
     res.status(400).send(err);
   }
 }
@@ -23,11 +27,13 @@ async function doesUserExist(req, res, next) {
     console.log("doesUserExist");
 
     const user = await getUserByEmailModel(req.body.email);
+    console.log(user);
 
-    if (!user.length) throw new Error("Invalid user");
-    req.body.user = user[0];
+    if (!user) throw new Error("Invalid user");
+    req.body.user = user;
     next();
   } catch (err) {
+    console.error(err);
     res.status(400).send(err);
   }
 }
@@ -36,27 +42,44 @@ async function verifyPassword(req, res, next) {
   try {
     console.log("verifyPassword");
 
-    const { user, password } = req.body;
+    let user = req.body.user;
+    // console.log(user);
+
+    let password;
+    if (req.body.currentPassword) {
+      password = req.body.currentPassword;
+      console.log("current", password);
+    } else {
+      password = req.body.password;
+      console.log("reg ", password);
+    }
 
     bcrypt.compare(password, user.password, (err, result) => {
+      console.log("comparing");
+
       if (err) {
         res.status(400).send(err);
         console.error(err);
         return;
       }
       if (result) {
+        console.log(result);
+
         const token = jwt.sign(
           { id: user.id, isAdmin: !!user.isAdmin },
           process.env.JWT_KEY,
           { expiresIn: "2hrs" }
         );
         req.body.token = token;
+
         next();
       } else {
         res.status(400).send("Incorrect Password");
       }
     });
-  } catch (error) {}
+  } catch (error) {
+    return error;
+  }
 }
 
 function hashPassword(req, res, next) {
@@ -79,7 +102,7 @@ function passwordsMatch(req, res, next) {
 }
 
 module.exports = {
-  isNewUser,
+  isNewEmail,
   passwordsMatch,
   hashPassword,
   verifyPassword,

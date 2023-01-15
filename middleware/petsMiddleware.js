@@ -34,15 +34,13 @@ const verifyToken = (req, res, next) => {
 
   jwt.verify(token, process.env.JWT_KEY, (err, decoded) => {
     if (err) {
-      console.log(err);
+      console.error(err);
 
       res.status(401).send("Invalid token");
       return;
     }
     if (decoded) {
       // req.body.userId = decoded.id;
-      // console.log(decoded);
-
       next();
     }
   });

@@ -8,15 +8,18 @@ const {
   getAllUsersModel,
   changeAdminStatusModel,
   getUserById,
+  updateUserModel,
+  updateUserModelPassword,
 } = require("../models/usersModels");
 const {
-  isNewUser,
+  isNewEmail,
   passwordsMatch,
   hashPassword,
   verifyPassword,
   doesUserExist,
 } = require("../middleware/usersMiddlesware");
 const { validateBody, verifyToken } = require("../middleware/petsMiddleware");
+const { verify } = require("crypto");
 
 router.use(express.json());
 router.use(cors());
@@ -40,7 +43,7 @@ router.post(
   validateBody(signupSchema),
   passwordsMatch,
   hashPassword,
-  isNewUser,
+  isNewEmail,
   async (req, res) => {
     try {
       const id = await addUserToDbModel(req.body);
@@ -77,6 +80,7 @@ router.get("/:id", async (req, res) => {
       lastName: user.lastName,
       email: user.email,
       phone: user.phone,
+      bio: user.bio,
     };
     res.send(userInfo);
   } catch (error) {
@@ -91,6 +95,38 @@ router.put("/toggleAdmin", verifyToken, async (req, res) => {
     // const adminStatus = !!user.isAdmin;
     res.send(user);
   } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+router.put(
+  "/updateUser/password/:id",
+  verifyToken,
+  passwordsMatch,
+  isNewEmail,
+  doesUserExist,
+  verifyPassword,
+  hashPassword,
+  async (req, res) => {
+    try {
+      console.log("backend");
+      const { id } = req.params;
+      const user = await updateUserModelPassword(id, req.body);
+      res.send(user);
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  }
+);
+
+router.put("/updateUser/:id", verifyToken, isNewEmail, async (req, res) => {
+  try {
+    console.log("backend ");
+    const { id } = req.params;
+    const user = await updateUserModel(id, req.body);
+    res.send(user);
+  } catch (error) {
+    console.error(error);
     res.status(500).send(error);
   }
 });

@@ -23,7 +23,7 @@ const addUserToDbModel = async (data) => {
 
 async function getUserByEmailModel(email) {
   try {
-    const user = await dbConnection.from("users").where({ email: email });
+    const [user] = await dbConnection.from("users").where({ email: email });
     // console.log("user:", user);
     return user;
   } catch (error) {
@@ -64,12 +64,50 @@ async function getUserById(id) {
   }
 }
 
+async function updateUserModel(id, newData) {
+  try {
+    // console.log("newData ", newData);
+
+    const { firstName, lastName, email, phone, bio } = newData;
+
+    await dbConnection
+      .from("users")
+      .where({ id })
+      .update({ firstName, lastName, email, phone, bio });
+
+    const [user] = dbConnection.from("users").where({ id });
+    return user;
+  } catch (error) {
+    return error;
+  }
+}
+
+async function updateUserModelPassword(id, newData) {
+  try {
+    console.log("newData ", newData);
+
+    const { firstName, lastName, email, phone, bio, password } = newData;
+
+    await dbConnection
+      .from("users")
+      .where({ id })
+      .update({ firstName, lastName, email, phone, bio, password });
+
+    const [user] = dbConnection.from("users").where({ id });
+    return user;
+  } catch (error) {
+    return error;
+  }
+}
+
 module.exports = {
   addUserToDbModel,
   getUserByEmailModel,
   getAllUsersModel,
   changeAdminStatusModel,
   getUserById,
+  updateUserModel,
+  updateUserModelPassword,
 };
 
 /*
