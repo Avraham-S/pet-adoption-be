@@ -52,13 +52,11 @@ router.post("/adopt", verifyToken, async (req, res) => {
   }
 });
 
-// ?status&type&height&weight&name
 router.get("/", async (req, res) => {
   try {
     const { id, queries } = req.query;
 
     const parsedQuery = JSON.parse(queries);
-    console.log(parsedQuery);
 
     const data = await getPetsModel(id, parsedQuery);
     res.send(data);

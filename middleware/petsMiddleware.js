@@ -39,7 +39,6 @@ const verifyToken = (req, res, next) => {
       return;
     }
     if (decoded) {
-      // req.body.userId = decoded.id;
       next();
     }
   });
@@ -76,7 +75,6 @@ const isPetSaved = async (req, res, next) => {
     const pet = await dbConnection
       .from("saved_pets")
       .where({ userId: ownerId, petId });
-    console.log("pet:", pet);
 
     if (pet.length) throw new Error("pet is already saved");
     next();

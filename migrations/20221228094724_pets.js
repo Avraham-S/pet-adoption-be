@@ -1,6 +1,5 @@
 exports.up = async function (knex) {
   const exists = await knex.schema.hasTable("pets");
-  console.log(exists);
   if (!exists) {
     return await knex.schema.createTable("pets", (table) => {
       table.increments("petId").primary();

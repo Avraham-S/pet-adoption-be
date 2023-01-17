@@ -28,18 +28,3 @@ dbConnection.migrate
     console.error(err);
     process.exit(1);
   });
-
-// const con = mysql.createConnection({
-//   host: "localhost",
-//   user: "root",
-//   password: "password",
-// });
-
-// con.connect(function (err) {
-//   try {
-//     if (err) throw err;
-//     console.log("Connected!");
-//   } catch (error) {
-//     console.error(error);
-//   }
-// });

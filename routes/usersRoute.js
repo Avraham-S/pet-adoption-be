@@ -92,7 +92,6 @@ router.put("/toggleAdmin", verifyToken, async (req, res) => {
   try {
     const { id } = req.body;
     const user = await changeAdminStatusModel(id);
-    // const adminStatus = !!user.isAdmin;
     res.send(user);
   } catch (error) {
     res.status(500).send(error);
@@ -109,10 +108,8 @@ router.put(
   hashPassword,
   async (req, res) => {
     try {
-      console.log("backend");
       const { id } = req.params;
       const [user] = await updateUserModelPassword(id, req.body);
-      console.log(user);
 
       res.send(user);
     } catch (error) {
@@ -123,10 +120,8 @@ router.put(
 
 router.put("/updateUser/:id", verifyToken, isNewEmail, async (req, res) => {
   try {
-    console.log("backend ");
     const { id } = req.params;
     const [user] = await updateUserModel(id, req.body);
-    console.log(user);
 
     res.send(user);
   } catch (error) {

@@ -24,7 +24,7 @@ const addUserToDbModel = async (data) => {
 async function getUserByEmailModel(email) {
   try {
     const [user] = await dbConnection.from("users").where({ email: email });
-    // console.log("user:", user);
+
     return user;
   } catch (error) {
     console.error(error);
@@ -43,7 +43,6 @@ async function getAllUsersModel() {
 async function changeAdminStatusModel(id) {
   try {
     const [user] = await dbConnection.from("users").where({ id });
-    console.log(user);
 
     await dbConnection
       .from("users")
@@ -66,8 +65,6 @@ async function getUserById(id) {
 
 async function updateUserModel(id, newData) {
   try {
-    // console.log("newData ", newData);
-
     const { firstName, lastName, email, phone, bio } = newData;
 
     await dbConnection
@@ -76,7 +73,6 @@ async function updateUserModel(id, newData) {
       .update({ firstName, lastName, email, phone, bio });
 
     const user = dbConnection.from("users").where({ id });
-    console.log(user);
 
     return user;
   } catch (error) {
@@ -86,8 +82,6 @@ async function updateUserModel(id, newData) {
 
 async function updateUserModelPassword(id, newData) {
   try {
-    console.log("newData ", newData);
-
     const { firstName, lastName, email, phone, bio, password } = newData;
 
     await dbConnection

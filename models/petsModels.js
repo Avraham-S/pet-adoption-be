@@ -13,19 +13,13 @@ const queryBuilder = (queryObj) => {
     .join(" AND ");
 
   const final = `${queryString.length ? "HAVING" : ""} ` + queryString;
-  console.log(final);
 
   return final;
 };
 
 async function addPetToDbModel(newPet) {
   try {
-    console.log("db");
-    console.log(newPet);
-
     const response = await dbConnection.from("pets").insert(newPet);
-    console.log(response);
-    console.log("res");
 
     return response;
   } catch (error) {
@@ -33,11 +27,9 @@ async function addPetToDbModel(newPet) {
     return false;
   }
 }
-// { name, height, weight, type, status }
 async function getPetsModel(userId, query) {
   const hasQuery = !!Object.entries(query).length;
   if (hasQuery) queryBuilder(query);
-  console.log(userId);
 
   try {
     if (userId) {
@@ -95,7 +87,7 @@ async function updatePetStatus(petId, ownerId, type) {
     return error;
   }
 }
-// TODO
+
 async function getPetsByOwnerId(ownerId) {
   try {
     const pets = await dbConnection
@@ -120,7 +112,6 @@ async function updatePetModel(id, data) {
   try {
     if (!data.picture) delete data.picture;
     delete data.created_at;
-    console.log(data);
 
     const res = await dbConnection
       .from("pets")
@@ -139,10 +130,8 @@ async function savePetModel(userId, petId) {
     const response = await dbConnection
       .from("saved_pets")
       .insert({ userId, petId });
-    console.log("response:", response);
 
     const connection = await dbConnection.from("saved_pets").where({ userId });
-    console.log("connection:", connection);
 
     return connection;
   } catch (error) {
@@ -154,7 +143,6 @@ async function savePetModel(userId, petId) {
 async function unsavePetModel(userId, petId) {
   try {
     await dbConnection.from("saved_pets").where({ userId, petId }).del();
-    console.log("delete");
   } catch (error) {
     console.error(error);
     return error;
