@@ -111,7 +111,9 @@ router.put(
     try {
       console.log("backend");
       const { id } = req.params;
-      const user = await updateUserModelPassword(id, req.body);
+      const [user] = await updateUserModelPassword(id, req.body);
+      console.log(user);
+
       res.send(user);
     } catch (error) {
       res.status(500).send(error);
@@ -123,7 +125,9 @@ router.put("/updateUser/:id", verifyToken, isNewEmail, async (req, res) => {
   try {
     console.log("backend ");
     const { id } = req.params;
-    const user = await updateUserModel(id, req.body);
+    const [user] = await updateUserModel(id, req.body);
+    console.log(user);
+
     res.send(user);
   } catch (error) {
     console.error(error);

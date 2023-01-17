@@ -1,3 +1,7 @@
+/**
+ * @param { import("knex").Knex } knex
+ * @returns { Promise<void> }
+ */
 exports.up = async function (knex) {
   const exists = await knex.schema.hasTable("users");
   console.log("exists: ", exists);
@@ -16,31 +20,10 @@ exports.up = async function (knex) {
   }
 };
 
-exports.down = async function (knex) {
-  const exists = await knex.schema.hasTable("users");
-  console.log("exists: ", exists);
-
+/**
+ * @param { import("knex").Knex } knex
+ * @returns { Promise<void> }
+ */
+exports.down = function (knex) {
   return knex.schema.dropTable("users");
 };
-
-/*
-"repassword"
-: 
-"schochet0205"
-email
-: 
-"ayschochet@gmail.com"
-firstName
-: 
-"Avraham"
-lastName
-: 
-"Schochet"
-password
-: 
-"schochet0205"
-phone
-: 
-"323232323232"
-
-*/

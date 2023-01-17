@@ -75,7 +75,9 @@ async function updateUserModel(id, newData) {
       .where({ id })
       .update({ firstName, lastName, email, phone, bio });
 
-    const [user] = dbConnection.from("users").where({ id });
+    const user = dbConnection.from("users").where({ id });
+    console.log(user);
+
     return user;
   } catch (error) {
     return error;
@@ -93,7 +95,7 @@ async function updateUserModelPassword(id, newData) {
       .where({ id })
       .update({ firstName, lastName, email, phone, bio, password });
 
-    const [user] = dbConnection.from("users").where({ id });
+    const user = dbConnection.from("users").where({ id });
     return user;
   } catch (error) {
     return error;

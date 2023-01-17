@@ -7,10 +7,10 @@ async function isNewEmail(req, res, next) {
   try {
     console.log("3");
     const user = await getUserByEmailModel(req.body.email);
-    // console.log(user);
+    console.log(user);
     // console.log(req.params.id);
 
-    if (user.length && user.id !== req.params.id) {
+    if (user && user.id !== req.params.id) {
       res.status(400).send("Email already in use");
       return;
     }
