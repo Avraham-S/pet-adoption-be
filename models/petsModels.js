@@ -6,7 +6,7 @@ const queryBuilder = (queryObj) => {
       if (entry[1] === "any") return "";
       return (
         entry[0] +
-        `${entry[0] === "height" || entry[0] === "weight" ? " >= " : " = "}` +
+        `${entry[0] === "height" || entry[0] === "weight" ? " <= " : " = "}` +
         `'${entry[1]}'`
       );
     })

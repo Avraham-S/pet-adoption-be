@@ -62,6 +62,7 @@ const verifyAdminToken = (req, res, next) => {
     if (decoded) {
       if (!decoded.isAdmin) {
         res.status(401).send("Must be admin");
+        return;
       }
       next();
     }
